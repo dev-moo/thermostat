@@ -31,18 +31,23 @@ while True:
 		sleep(5)
 		
 	
-target_temp = 25
-		
-def start_climate_control(s, temp):
+
+target_temp = 20
+control_mode = 'heating'
+
+#Start
+def start_climate_control(s, temp, mode):
 	
 	if climate_control_status() == 'TRUE':
 		print 'Thread already active'
 		return False
 		
 	s.clear()
-	t = threading.Thread(name='thermostat', target=thermostat.thermostat, args=(s, temp))
+	t = threading.Thread(name='thermostat', target=thermostat.thermostat, args=(s, temp, mode))
 	t.start()	
+	
 
+#Stop 
 def stop_climate_control(s):
 	
 	s.set()
@@ -57,6 +62,7 @@ def stop_climate_control(s):
 	return False	
 	
 
+#Check if running
 def climate_control_status():
 	for t in threading.enumerate():
 		if t.getName() == 'thermostat':
@@ -89,7 +95,9 @@ if __name__ == "__main__":
 					print "Start command"
 					target_temp = float(command['TEMP'])
 					print "Temp: " + str(target_temp)
-					start_climate_control(stop, target_temp)
+					control_mode = command['MODE']
+					print "Control Mode: " + control_mode
+					start_climate_control(stop, target_temp, control_mode)
 					print "Started"
 				
 				if command['OP'] == "STOP":
@@ -98,7 +106,7 @@ if __name__ == "__main__":
 				if command['OP'] == "STATUS":
 					climate_control_status()
 					
-					d = {'ACTIVE': str(climate_control_status()), 'TARGETTEMP': str(target_temp), 'ROOMTEMP': str(get_temp.get_room_temp())}
+					d = {'ACTIVE': str(climate_control_status()), 'TARGETTEMP': str(target_temp), 'ROOMTEMP': str(get_temp.get_room_temp(), 'MODE': control_mode)}
 										
 					sent = sock.sendto(json.dumps(d), address)	
 					print json.dumps(d)
