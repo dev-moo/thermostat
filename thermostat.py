@@ -27,7 +27,7 @@ HEATING_MAX_TEMP = 21
 COOLING_MIN_TEMP = 23
 COOLING_MAX_TEMP = 30
 
-PID_OVERRUN = 4
+PID_OVERRUN = 4 #Introduce some hysteresis
 
 
 #Class to store settings
