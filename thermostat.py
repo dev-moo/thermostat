@@ -189,7 +189,7 @@ def calculate_desired_settings(desired_settings, control_mode, pid_output):
 			desired_settings.power = 'Off'		
 
 			
-	return None
+	return desired_settings
 			
 	
 #Main loop
@@ -197,6 +197,14 @@ def thermostat(e, target_temp, control_mode):
 
 	log_event("Starting temp control...")
 	log_event("Control Mode: " + control_mode)
+	
+	if control_mode == 'heating':
+		min_temp = HEATING_MIN_TEMP
+		max_temp = HEATING_MAX_TEMP
+	
+	elif control_mode == 'cooling':
+		min_temp = COOLING_MIN_TEMP
+		max_temp = COOLING_MAX_TEMP
 	
 	#Instantiate PID Controller
 	pid = pid_control.PID_Controller(target_temp, get_temp.get_room_temp(), min_temp - PID_OVERRUN, max_temp + PID_OVERRUN)
@@ -225,7 +233,7 @@ def thermostat(e, target_temp, control_mode):
 		
 		log_event('PID Output: ' + str(pid.Output))
 		
-		desired_settings = calculate_desired_settings(desired_settings, control_mode, int(pid.output))	#Get new settings to apply to A/C
+		desired_settings = calculate_desired_settings(desired_settings, control_mode, int(pid.Output))	#Get new settings to apply to A/C
 		
 		current_settings = apply_settings(current_settings, desired_settings)	#Apply new settings to A/C and put new A/C settings into variable
 	
