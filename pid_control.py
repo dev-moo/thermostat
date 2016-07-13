@@ -53,7 +53,7 @@ class PID_Controller(object):
 		self.kd = KD 
 		
 
-	def __init__(self, sp, ct):
+	def __init__(self, sp, ct, mintemp, maxtemp):
 		
 		self.lastTime = datetime.datetime.now()
 		
@@ -70,8 +70,8 @@ class PID_Controller(object):
 		
 		self.SampleTime = 1
 		
-		self.outMin = 18
-		self.outMax = 34
+		self.outMin = mintemp
+		self.outMax = maxtemp
 				
 		
 	def update(self, newInput):
@@ -90,5 +90,5 @@ class PID_Controller(object):
 
 if __name__ == "__main__":
 
-	PID = PID_Controller(25, 25)
+	PID = PID_Controller(25, 25, 20, 34)
 		
