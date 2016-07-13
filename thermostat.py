@@ -149,8 +149,13 @@ def calculate_desired_settings(desired_settings, control_mode, pid_output):
 		
 	if control_mode == 'heating':
 	
-		if pid_output < HEATING_MIN_TEMP:
+		if pid_output < HEATING_MIN_TEMP-PID_OVERRUN:
 			desired_settings.power = 'Off'
+		
+		elif pid_output >= HEATING_MIN_TEMP-PID_OVERRUN and pid_output < HEATING_MIN_TEMP:
+			desired_settings.power = 'On'
+			desired_settings.mode = 'Heat'			
+			desired_settings.temp = str(HEATING_MIN_TEMP)			
 			
 		elif pid_output >= HEATING_MIN_TEMP and pid_output <= HEATING_MAX_TEMP:
 			desired_settings.power = 'On'
