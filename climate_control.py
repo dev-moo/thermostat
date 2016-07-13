@@ -106,7 +106,7 @@ if __name__ == "__main__":
 				if command['OP'] == "STATUS":
 					climate_control_status()
 					
-					d = {'ACTIVE': str(climate_control_status()), 'TARGETTEMP': str(target_temp), 'ROOMTEMP': str(get_temp.get_room_temp(), 'MODE': control_mode)}
+					d = {'ACTIVE': str(climate_control_status()), 'TARGETTEMP': str(target_temp), 'ROOMTEMP': str(get_temp.get_room_temp()), 'MODE': control_mode}
 										
 					sent = sock.sendto(json.dumps(d), address)	
 					print json.dumps(d)
